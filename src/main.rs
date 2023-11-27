@@ -11,7 +11,7 @@ pub struct CurrencyExchange {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Rates {
     #[serde(rename = "USD")]
-    pub usd: i64,
+    pub usd: f64,
     #[serde(rename = "AED")]
     pub aed: f64,
     #[serde(rename = "AFN")]
@@ -35,7 +35,7 @@ pub struct Rates {
     #[serde(rename = "BAM")]
     pub bam: f64,
     #[serde(rename = "BBD")]
-    pub bbd: i64,
+    pub bbd: f64,
     #[serde(rename = "BDT")]
     pub bdt: f64,
     #[serde(rename = "BGN")]
@@ -45,7 +45,7 @@ pub struct Rates {
     #[serde(rename = "BIF")]
     pub bif: f64,
     #[serde(rename = "BMD")]
-    pub bmd: i64,
+    pub bmd: f64,
     #[serde(rename = "BND")]
     pub bnd: f64,
     #[serde(rename = "BOB")]
@@ -53,7 +53,7 @@ pub struct Rates {
     #[serde(rename = "BRL")]
     pub brl: f64,
     #[serde(rename = "BSD")]
-    pub bsd: i64,
+    pub bsd: f64,
     #[serde(rename = "BTN")]
     pub btn: f64,
     #[serde(rename = "BWP")]
@@ -61,7 +61,7 @@ pub struct Rates {
     #[serde(rename = "BYN")]
     pub byn: f64,
     #[serde(rename = "BZD")]
-    pub bzd: i64,
+    pub bzd: f64,
     #[serde(rename = "CAD")]
     pub cad: f64,
     #[serde(rename = "CDF")]
@@ -77,7 +77,7 @@ pub struct Rates {
     #[serde(rename = "CRC")]
     pub crc: f64,
     #[serde(rename = "CUP")]
-    pub cup: i64,
+    pub cup: f64,
     #[serde(rename = "CVE")]
     pub cve: f64,
     #[serde(rename = "CZK")]
@@ -93,7 +93,7 @@ pub struct Rates {
     #[serde(rename = "EGP")]
     pub egp: f64,
     #[serde(rename = "ERN")]
-    pub ern: i64,
+    pub ern: f64,
     #[serde(rename = "ETB")]
     pub etb: f64,
     #[serde(rename = "EUR")]
@@ -175,7 +175,7 @@ pub struct Rates {
     #[serde(rename = "LAK")]
     pub lak: f64,
     #[serde(rename = "LBP")]
-    pub lbp: i64,
+    pub lbp: f64,
     #[serde(rename = "LKR")]
     pub lkr: f64,
     #[serde(rename = "LRD")]
@@ -227,7 +227,7 @@ pub struct Rates {
     #[serde(rename = "OMR")]
     pub omr: f64,
     #[serde(rename = "PAB")]
-    pub pab: i64,
+    pub pab: f64,
     #[serde(rename = "PEN")]
     pub pen: f64,
     #[serde(rename = "PGK")]
@@ -338,10 +338,15 @@ pub struct Rates {
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let request_url: String = format!(
-        "https://open.er-api.com/v6/latest/{currency}",
-        currency = "USD"
-    );
+    use std::io::{stdin, stdout, Write};
+    let mut s: String = String::new();
+    print!("Please enter the currency: ");
+    let _ = stdout().flush();
+    stdin()
+        .read_line(&mut s)
+        .expect("Did not enter a correct currency");
+
+    let request_url: String = format!("https://open.er-api.com/v6/latest/{s}");
     println!("{}", request_url);
     let response = reqwest::get(&request_url).await?;
 
