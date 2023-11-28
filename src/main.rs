@@ -1,11 +1,12 @@
 use dialoguer::Select;
 use reqwest::Error;
+use strum::{EnumIter, IntoEnumIterator};
 
 mod types;
 
 #[tokio::main]
 async fn main() -> Result<(), Error> {
-    let items: Vec<&str> = vec!["USD", "BRL", "EUR"];
+    let items = types::Currencies::iter().collect::<Vec<_>>();
 
     let selection: usize = Select::new()
         .with_prompt("Currency input:")
@@ -13,9 +14,7 @@ async fn main() -> Result<(), Error> {
         .interact()
         .unwrap();
 
-    let selected_item: &str = items[selection];
-
-    println!("You chose: {}", selected_item);
+    let selected_item: &types::Currencies = &items[selection];
     let request_url: String = format!("https://open.er-api.com/v6/latest/{selected_item}");
     println!("{}", request_url);
     let response: reqwest::Response = reqwest::get(&request_url).await?;
